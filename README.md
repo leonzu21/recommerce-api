@@ -15,7 +15,7 @@ Requirements
 
   * PHP 7.2 or higher;
   * MySQL Server 8.0
-  * PDO-SQLite PHP extension enabled;
+  * PDO-MySQL PHP extension enabled;
 
 Installation
 ------------
