@@ -16,13 +16,11 @@ Requirements
   * PHP 7.2 or higher;
   * MySQL Server 8.0
   * PDO-SQLite PHP extension enabled;
-  * and the [usual Symfony application requirements][2].
 
 Installation
 ------------
 
-[Download Symfony][4] to install the `symfony` binary on your computer and run
-this command:
+Download Symfony to install the `symfony` binary on your computer.
 
 Then navigate to the project's root folder.
 
