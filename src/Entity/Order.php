@@ -39,6 +39,7 @@ class Order
     /**
      * @var Product[] $mobiles ;
      * @ORM\OneToMany(targetEntity="Product", mappedBy="order")
+     * @Groups({"order:read"})
      */
     private $mobiles;
 
