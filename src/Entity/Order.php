@@ -9,6 +9,14 @@ use App\Entity\Product;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+// SECURITY:
+// @ApiResource(
+// collectionOperations: [
+//      "get",
+//      "post" => ["security" => "is_granted('ROLE_ADMIN')"],
+// ]
+//)
+
 
 /**
  * @ORM\Entity(repositoryClass=OrderRepository::class)
