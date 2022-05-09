@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\Entity\Product;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 
 /**
@@ -26,7 +27,7 @@ class Order
 
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
+     * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -39,9 +40,9 @@ class Order
 
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(name="customer_email", type="string", length=255)
      */
-    private $customer_email;
+    private $customerEmail;
 
     /**
      * @ORM\Column(type="float", nullable=true)
@@ -62,12 +63,12 @@ class Order
 
     public function getCustomerEmail(): ?string
     {
-        return $this->customer_email;
+        return $this->customerEmail;
     }
 
-    public function setCustomerEmail(string $customer_email): self
+    public function setCustomerEmail(string $customerEmail): self
     {
-        $this->customer_email = $customer_email;
+        $this->customerEmail = $customerEmail;
 
         return $this;
     }
@@ -75,7 +76,7 @@ class Order
     /**
      * @return Product[]
      */
-    public function getMobiles(): array
+    public function getMobiles()
     {
         return $this->mobiles;
     }
@@ -110,5 +111,23 @@ class Order
         $this->created = $created;
 
         return $this;
+    }
+
+    /**
+     * Prepersist gets triggered on Insert
+     * Generates createdAt timestamp for order
+     * @ORM\PrePersist
+     */
+    public function updatedTimestamps()
+    {
+        if ($this->created == null) {
+            $this->created = new \DateTime('now');
+        }
+    }
+
+
+    public function __toString()
+    {
+        return $this->customerEmail;
     }
 }

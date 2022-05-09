@@ -7,12 +7,16 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Brand;
 use App\Entity\Order;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
  * @ORM\HasLifecycleCallbacks()
  * @ORM\Table(name="product")
- * @ApiResource()
+ * @ApiResource(
+ *   normalizationContext={"groups" = {"product:read"}},
+ *   denormalizationContext={"groups" = {"product:write"}},
+ * )
  */
 class Product
 {
@@ -23,6 +27,7 @@ class Product
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
+     * @Groups({"product:write", "product:read"})
      */
     private $id;
 
@@ -31,6 +36,7 @@ class Product
      *
      * @ORM\ManyToOne(targetEntity="Brand")
      * @ORM\JoinColumn(name="brand", referencedColumnName="id")
+     * @Groups({"product:write", "product:read"})
      */
     private $brand;
 
@@ -38,16 +44,19 @@ class Product
      * @var Order $order ;
      * @ORM\ManyToOne(targetEntity="Order", inversedBy="mobiles")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"product:write", "product:read"})
      */
     private $order;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"product:write", "product:read"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"product:write", "product:read"})
      */
     private $price;
 
@@ -112,5 +121,15 @@ class Product
         $this->price = $price;
 
         return $this;
+    }
+
+    /**
+     * Prepersist gets triggered on Insert
+     * Adds up the price of the product to the amount of the order
+     * @ORM\PrePersist
+     */
+    public function updatedAmount()
+    {
+        $this->order->setAmount($this->order->getAmount() + $this->price);
     }
 }
